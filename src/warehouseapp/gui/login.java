@@ -98,8 +98,7 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInBtnActionPerformed
-        try {
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser");
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from USERS");
             while(rs.next()){

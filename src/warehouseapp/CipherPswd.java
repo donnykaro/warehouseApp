@@ -19,7 +19,6 @@ public class CipherPswd {
         for(int i = 0; i<password.length(); i++)
             encPswd += (char) (password.charAt(i) ^ key);
         
-        System.out.println(encPswd);
         return encPswd;
     }
     

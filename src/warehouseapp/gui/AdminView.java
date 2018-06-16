@@ -23,13 +23,12 @@ import warehouseapp.CipherPswd;
  */
 public class AdminView extends javax.swing.JFrame {
 
-    Connection con;
     /**
      * Creates new form AdminView
      */
     public AdminView() {
         initComponents();
-        fillListBoxes();
+        updateListBoxes();
         fillComboBox();
     }
 
@@ -234,8 +233,7 @@ public class AdminView extends javax.swing.JFrame {
 
     private void newUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newUserActionPerformed
         
-        try {
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser");
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
             String encPassword = "";
             for(char c:newUserPassword.getPassword()){
                 encPassword += c;
@@ -275,7 +273,7 @@ public class AdminView extends javax.swing.JFrame {
             messageLbl.setText("Database error, contact administrator");
             //Logger.getLogger(AdminView.class.getName()).log(Level.SEVERE, null, ex);
         }   
-        fillListBoxes();
+        updateListBoxes();
     }//GEN-LAST:event_newUserActionPerformed
 
     private void newUserRoleCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newUserRoleCBActionPerformed
@@ -283,11 +281,9 @@ public class AdminView extends javax.swing.JFrame {
     }//GEN-LAST:event_newUserRoleCBActionPerformed
 
     private void deleteUsrBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteUsrBtnActionPerformed
-        try {
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
             if(userList.getSelectedValue() != null){
                 String deleteUser = userList.getSelectedValue().toString();
-
-                con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser");
 
                 PreparedStatement ps = con.prepareStatement("DELETE FROM LOGINUSER.USERS WHERE LOGIN = ?");
 
@@ -302,16 +298,14 @@ public class AdminView extends javax.swing.JFrame {
             messageLbl.setText("Database error, contact administrator");
             //Logger.getLogger(AdminView.class.getName()).log(Level.SEVERE, null, ex);
         }
-        fillListBoxes();
+        updateListBoxes();
     }//GEN-LAST:event_deleteUsrBtnActionPerformed
 
     private void changePswdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePswdBtnActionPerformed
-        try {
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
             if(userList.getSelectedValue() != null){
                 String updateUserPassword = userList.getSelectedValue().toString();
                 String encPassword = CipherPswd.encodePassword(changePswdTxt.getText());
-
-                con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser");
 
                 PreparedStatement ps = con.prepareStatement("UPDATE USERS SET PASSWORD = ? WHERE LOGIN = ?");
                 
@@ -330,13 +324,11 @@ public class AdminView extends javax.swing.JFrame {
     }//GEN-LAST:event_changePswdBtnActionPerformed
 
     private void suspendUsrBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suspendUsrBtnActionPerformed
-        changeSuspensionState(true);   
-        //fillListBoxes();
+        changeSuspensionState(true);
     }//GEN-LAST:event_suspendUsrBtnActionPerformed
 
     private void unlockUsrBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unlockUsrBtnActionPerformed
         changeSuspensionState(false);
-        //fillListBoxes();
     }//GEN-LAST:event_unlockUsrBtnActionPerformed
 
     private void changePswdTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePswdTxtActionPerformed
@@ -378,14 +370,13 @@ public class AdminView extends javax.swing.JFrame {
         });
     }
     
-    private void fillListBoxes(){
+    private void updateListBoxes(){
         // TODO use table instead of list
         String name;
         boolean blocked;
         DefaultListModel usrListMdl = new DefaultListModel();
         DefaultListModel blckdListMdl = new DefaultListModel();
-        try {
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser");
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT LOGIN, BLOCKED FROM USERS");
             while(rs.next()){
@@ -409,9 +400,7 @@ public class AdminView extends javax.swing.JFrame {
     }
     
     private void changeSuspensionState(boolean status){
-        try {
-            //
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser");
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
             
             if(userList.getSelectedValue() != null){
                 String blockUser = userList.getSelectedValue().toString();
@@ -441,7 +430,7 @@ public class AdminView extends javax.swing.JFrame {
                 else
                     messageLbl.setText("User unlocked");
                 
-                fillListBoxes();
+                updateListBoxes();
             }else
                 messageLbl.setText("Select user");
                 return;

@@ -5,6 +5,21 @@
  */
 package warehouseapp.gui;
 
+import com.sun.glass.events.KeyEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author proggy
@@ -16,6 +31,8 @@ public class ManagerView extends javax.swing.JFrame {
      */
     public ManagerView() {
         initComponents();
+        fillProductTable();
+        updateProductTable();
     }
 
     /**
@@ -27,31 +44,190 @@ public class ManagerView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        productTbl = new javax.swing.JTable();
+        addPrdctBtn = new javax.swing.JButton();
+        delPrdctBtn = new javax.swing.JButton();
+        prdctNameTxt = new javax.swing.JTextField();
+        prdctQuantTxt = new javax.swing.JTextField();
+        prdctSupplierTxt = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        messageLbl = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("MANAGER");
+        productTbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(productTbl);
+
+        addPrdctBtn.setText("Add Product");
+        addPrdctBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPrdctBtnActionPerformed(evt);
+            }
+        });
+
+        delPrdctBtn.setText("Delete Product");
+        delPrdctBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delPrdctBtnActionPerformed(evt);
+            }
+        });
+
+        prdctQuantTxt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                prdctQuantTxtKeyTyped(evt);
+            }
+        });
+
+        jLabel1.setText("P. Name");
+
+        jLabel2.setText("Quantity");
+
+        jLabel3.setText("Supplier");
+
+        jButton3.setText("Export to xlsx");
+
+        messageLbl.setText("jLabel4");
+
+        jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jLabel4.setText("Product List");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(167, 167, 167)
-                .addComponent(jLabel1)
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(messageLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 1, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(prdctQuantTxt)
+                            .addComponent(prdctSupplierTxt)
+                            .addComponent(prdctNameTxt))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addPrdctBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(delPrdctBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(142, 142, 142)
-                .addComponent(jLabel1)
-                .addContainerGap(141, Short.MAX_VALUE))
+                .addGap(9, 9, 9)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addPrdctBtn)
+                    .addComponent(prdctNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(prdctQuantTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(delPrdctBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(prdctSupplierTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addComponent(messageLbl)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addPrdctBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPrdctBtnActionPerformed
+        if(prdctNameTxt.getText().equals("") || prdctQuantTxt.getText().equals("")){
+                messageLbl.setText("Name, and Quantity cant be empty");
+                return;
+            }
+//        String quantity = "0";
+//        if(!prdctQuantTxt.getText().equals("")){
+//           String quantity = prdctQuantTxt.getText();
+//        }
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
+            
+            Statement st = con.createStatement();
+            
+            PreparedStatement ps = con.prepareStatement("INSERT INTO LOGINUSER.PRODUCT (NAME, \"QUANTITY\", SUPPLIER) \n VALUES (?, ?, ?)");
+            
+            ps.setString(1, prdctNameTxt.getText());
+            ps.setString(2, prdctQuantTxt.getText());
+            ps.setString(3, prdctSupplierTxt.getText());
+            
+            
+            ps.executeUpdate();
+            ps.close();
+            messageLbl.setText("Product added");
+        } catch(SQLIntegrityConstraintViolationException ex){
+            messageLbl.setText("Product already exist");
+        } catch (SQLException ex) {
+            messageLbl.setText("Database error, contact administrator");
+            //Logger.getLogger(ManagerView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        clearTable();
+        updateProductTable(); 
+    }//GEN-LAST:event_addPrdctBtnActionPerformed
+
+    private void prdctQuantTxtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_prdctQuantTxtKeyTyped
+        char c = evt.getKeyChar();
+        if(!(Character.isDigit(c) || c == KeyEvent.VK_BACKSPACE || c == KeyEvent.VK_DELETE)){
+            evt.consume();
+            messageLbl.setText("Enter a number");
+        }
+    }//GEN-LAST:event_prdctQuantTxtKeyTyped
+
+    private void delPrdctBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delPrdctBtnActionPerformed
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
+            if(productTbl.getSelectedRow() != -1){
+                int row = productTbl.getSelectedRow();
+                String prdctName = productTbl.getModel().getValueAt(row, 0).toString();
+                //System.out.println(prdctName);
+
+                PreparedStatement ps = con.prepareStatement("DELETE FROM LOGINUSER.PRODUCT WHERE NAME = ?");
+
+                ps.setString(1, prdctName);
+
+                ps.executeUpdate();
+                ps.close();
+                messageLbl.setText("Product deleted");
+                clearTable();
+                updateProductTable();
+            }else
+                messageLbl.setText("Select product");
+        } catch (SQLException ex) {
+            messageLbl.setText("Database error, contact administrator");
+            //Logger.getLogger(AdminView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_delPrdctBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -87,8 +263,53 @@ public class ManagerView extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void fillProductTable(){
+        DefaultTableModel model = (DefaultTableModel) productTbl.getModel();
+        model.addColumn("product Name");
+        model.addColumn("quantity");
+        model.addColumn("supplier");
+    }
+    
+    private void updateProductTable(){
+        DefaultTableModel model = (DefaultTableModel) productTbl.getModel();
+        try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM PRODUCT");
+            
+            ArrayList<String> data;
+            
+            while(rs.next()){
+                data = new ArrayList<String>();
+                data.add(rs.getString(2));
+                data.add(rs.getString(3));
+                data.add(rs.getString(4));
+                model.addRow(data.toArray());   
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void clearTable(){
+        DefaultTableModel model = (DefaultTableModel) productTbl.getModel();
+        model.setRowCount(0);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addPrdctBtn;
+    private javax.swing.JButton delPrdctBtn;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel messageLbl;
+    private javax.swing.JTextField prdctNameTxt;
+    private javax.swing.JTextField prdctQuantTxt;
+    private javax.swing.JTextField prdctSupplierTxt;
+    private javax.swing.JTable productTbl;
     // End of variables declaration//GEN-END:variables
 }
