@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import warehouseapp.CipherPswd;
 
 /**
  *
@@ -68,7 +69,7 @@ public class login extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
-                        .addGap(0, 124, Short.MAX_VALUE))
+                        .addGap(0, 274, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(logInBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -100,15 +101,14 @@ public class login extends javax.swing.JFrame {
         try {
             Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser");
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from USERTABLE");
-            //ResultSet password = st.executeQuery("select password from USERTABLE");
+            ResultSet rs = st.executeQuery("select * from USERS");
             while(rs.next()){
-//                System.out.println(loginTxt.getText());
-                String password = "";
+                String encPassword = "";
                 for(char c:passwordTxt.getPassword()){
-                    password += c;
+                    encPassword += c;
                 }
-                System.out.println(password);
+                
+                String password = CipherPswd.decodePassword(encPassword);
                 
                 if(rs.getString(2).equals(loginTxt.getText()) && rs.getString(3).equals(password)){
                     // check if user is blocked
@@ -117,19 +117,29 @@ public class login extends javax.swing.JFrame {
                         break;
                     }
                     super.dispose();
-                    MainView l = new MainView();
-                    l.setVisible(true);
-                    break;
+                    //role
+                    //1-admin
+                    //2-manager
+                    //3-production
+                    if(rs.getInt(4) == 1){
+                        AdminView aView = new AdminView();
+                        aView.setVisible(true);
+                        break;
+                    }else if(rs.getInt(4) == 2){
+                        ManagerView mView = new ManagerView();
+                        mView.setVisible(true);
+                        break;
+                    }else if(rs.getInt(4) == 3){
+                        ProductionView pView = new ProductionView();
+                        pView.setVisible(true);
+                        break;
+                    }
+                    
                 }else
                     loginInfo.setText("incorrect login or password");
             }
-//        super.dispose();
-//        MainView l = new MainView();
-//        l.setVisible(true);
-//this.setVisible(false);
-//new mainView.setVisible(true);
         } catch (SQLException ex) {
-            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+            loginInfo.setText("Database error, contact administrator");
         }
     }//GEN-LAST:event_logInBtnActionPerformed
 
