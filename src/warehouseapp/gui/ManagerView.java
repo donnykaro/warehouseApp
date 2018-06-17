@@ -6,7 +6,11 @@
 package warehouseapp.gui;
 
 import com.sun.glass.events.KeyEvent;
+import java.awt.Desktop;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,6 +26,12 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import warehouseapp.NewXls;
 
 /**
  *
@@ -99,7 +109,7 @@ public class ManagerView extends javax.swing.JFrame {
 
         jLabel3.setText("Supplier");
 
-        exportToXlsxBtn.setText("Export to xlsx");
+        exportToXlsxBtn.setText("Export to Excel");
         exportToXlsxBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportToXlsxBtnActionPerformed(evt);
@@ -118,7 +128,7 @@ public class ManagerView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(messageLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 1, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,13 +182,10 @@ public class ManagerView extends javax.swing.JFrame {
 
     private void addPrdctBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPrdctBtnActionPerformed
         if(prdctNameTxt.getText().equals("") || prdctQuantTxt.getText().equals("")){
-                messageLbl.setText("Name, and Quantity cant be empty");
-                return;
-            }
-//        String quantity = "0";
-//        if(!prdctQuantTxt.getText().equals("")){
-//           String quantity = prdctQuantTxt.getText();
-//        }
+            messageLbl.setText("Name, and Quantity cant be empty");
+            return;
+        }
+        
         try(Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/warehouse_user","loginuser","loginuser")) {
             
             Statement st = con.createStatement();
@@ -235,17 +242,24 @@ public class ManagerView extends javax.swing.JFrame {
     }//GEN-LAST:event_delPrdctBtnActionPerformed
 
     private void exportToXlsxBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportToXlsxBtnActionPerformed
-        // TODO add exporting file to xlsx
-//        JFileChooser fs = null;
-//        
-//        if(System.getProperty("os.name").equals("Linux"))
-//            fs = new JFileChooser(new File("."));
-//        else if(System.getProperty("os.name").equals("Windows"))
-//            fs = new JFileChooser(new File("c:\\"));
-//        
-//        fs.setDialogTitle("Export file to xls");
-//        fs.setFileFilter(new FileNameExtensionFilter(".txt", "Text File"));
-//        fs.showSaveDialog(null);
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel files","xls","excel");       
+        fileChooser.addChoosableFileFilter(filter);     
+        fileChooser.setFileFilter(filter);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setDialogTitle("Export file to xls");
+        int retval = fileChooser.showSaveDialog(this);
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            
+        File file = fileChooser.getSelectedFile();
+        if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("xls")) {
+        } else {
+            file = new File(file.toString() + ".xll");
+            file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".xls"); 
+        }
+        NewXls.createXls(file);
+        
+        }
     }//GEN-LAST:event_exportToXlsxBtnActionPerformed
 
     /**
