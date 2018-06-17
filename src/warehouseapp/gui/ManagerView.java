@@ -6,6 +6,7 @@
 package warehouseapp.gui;
 
 import com.sun.glass.events.KeyEvent;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,8 +17,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -54,7 +57,7 @@ public class ManagerView extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        exportToXlsxBtn = new javax.swing.JButton();
         messageLbl = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -96,9 +99,12 @@ public class ManagerView extends javax.swing.JFrame {
 
         jLabel3.setText("Supplier");
 
-        jButton3.setText("Export to xlsx");
-
-        messageLbl.setText("jLabel4");
+        exportToXlsxBtn.setText("Export to xlsx");
+        exportToXlsxBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportToXlsxBtnActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jLabel4.setText("Product List");
@@ -126,7 +132,7 @@ public class ManagerView extends javax.swing.JFrame {
                             .addComponent(prdctNameTxt))
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(exportToXlsxBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(addPrdctBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(delPrdctBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
@@ -155,8 +161,8 @@ public class ManagerView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(prdctSupplierTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                    .addComponent(exportToXlsxBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(messageLbl)
                 .addContainerGap())
         );
@@ -210,7 +216,6 @@ public class ManagerView extends javax.swing.JFrame {
             if(productTbl.getSelectedRow() != -1){
                 int row = productTbl.getSelectedRow();
                 String prdctName = productTbl.getModel().getValueAt(row, 0).toString();
-                //System.out.println(prdctName);
 
                 PreparedStatement ps = con.prepareStatement("DELETE FROM LOGINUSER.PRODUCT WHERE NAME = ?");
 
@@ -228,6 +233,20 @@ public class ManagerView extends javax.swing.JFrame {
             //Logger.getLogger(AdminView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_delPrdctBtnActionPerformed
+
+    private void exportToXlsxBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportToXlsxBtnActionPerformed
+        // TODO add exporting file to xlsx
+//        JFileChooser fs = null;
+//        
+//        if(System.getProperty("os.name").equals("Linux"))
+//            fs = new JFileChooser(new File("."));
+//        else if(System.getProperty("os.name").equals("Windows"))
+//            fs = new JFileChooser(new File("c:\\"));
+//        
+//        fs.setDialogTitle("Export file to xls");
+//        fs.setFileFilter(new FileNameExtensionFilter(".txt", "Text File"));
+//        fs.showSaveDialog(null);
+    }//GEN-LAST:event_exportToXlsxBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -300,7 +319,7 @@ public class ManagerView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addPrdctBtn;
     private javax.swing.JButton delPrdctBtn;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton exportToXlsxBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

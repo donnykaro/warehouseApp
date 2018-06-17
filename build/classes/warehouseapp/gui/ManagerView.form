@@ -45,7 +45,7 @@
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jButton3" alignment="1" max="32767" attributes="0"/>
+                          <Component id="exportToXlsxBtn" alignment="1" max="32767" attributes="0"/>
                           <Component id="addPrdctBtn" alignment="1" max="32767" attributes="0"/>
                           <Component id="delPrdctBtn" alignment="1" max="32767" attributes="0"/>
                       </Group>
@@ -82,9 +82,9 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="prdctSupplierTxt" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="exportToXlsxBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="17" max="32767" attributes="0"/>
+              <EmptySpace pref="34" max="32767" attributes="0"/>
               <Component id="messageLbl" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -148,15 +148,15 @@
         <Property name="text" type="java.lang.String" value="Supplier"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="exportToXlsxBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="Export to xlsx"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportToXlsxBtnActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="messageLbl">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel4"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
