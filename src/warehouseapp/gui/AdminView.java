@@ -240,6 +240,11 @@ public class AdminView extends javax.swing.JFrame {
             }
             String password = CipherPswd.encodePassword(encPassword);
             
+            if(newUserName.getText().equals("") || password.equals("")){
+                messageLbl.setText("User name, and password cant be empty");
+                return;
+            }
+            
             int usrRole=3;
             switch(newUserRoleCB.getSelectedItem().toString()){
                 case "Production":

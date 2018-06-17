@@ -5,6 +5,8 @@
  */
 package warehouseapp;
 
+import warehouseapp.gui.login;
+
 /**
  *
  * @author proggy
@@ -15,7 +17,8 @@ public class WareHouseApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        login lgn = new login();
+        lgn.show();
     }
     
 }
