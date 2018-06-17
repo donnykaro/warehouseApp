@@ -159,6 +159,7 @@ public class ProductionView extends javax.swing.JFrame {
 
     private void clearTable(){
         DefaultTableModel model = (DefaultTableModel) productTbl.getModel();
+        model.setColumnCount(0);
         model.setRowCount(0);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
