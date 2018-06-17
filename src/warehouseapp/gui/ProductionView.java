@@ -93,6 +93,7 @@ public class ProductionView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void refreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshBtnActionPerformed
+        clearTable();
         updateProductTable();
     }//GEN-LAST:event_refreshBtnActionPerformed
 
@@ -156,6 +157,10 @@ public class ProductionView extends javax.swing.JFrame {
         
     }
 
+    private void clearTable(){
+        DefaultTableModel model = (DefaultTableModel) productTbl.getModel();
+        model.setRowCount(0);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
