@@ -5,6 +5,7 @@
  */
 package warehouseapp.gui;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,7 +14,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.apache.commons.io.FilenameUtils;
+import warehouseapp.NewXls;
 
 /**
  *
@@ -42,6 +47,7 @@ public class ProductionView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         productTbl = new javax.swing.JTable();
         refreshBtn = new javax.swing.JButton();
+        exportToXlsxBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,6 +71,13 @@ public class ProductionView extends javax.swing.JFrame {
             }
         });
 
+        exportToXlsxBtn.setText("Export to Excel");
+        exportToXlsxBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportToXlsxBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,7 +87,10 @@ public class ProductionView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refreshBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(refreshBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(exportToXlsxBtn)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -85,7 +101,9 @@ public class ProductionView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(refreshBtn)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(refreshBtn)
+                    .addComponent(exportToXlsxBtn))
                 .addGap(14, 14, 14))
         );
 
@@ -96,6 +114,27 @@ public class ProductionView extends javax.swing.JFrame {
         clearTable();
         updateProductTable();
     }//GEN-LAST:event_refreshBtnActionPerformed
+
+    private void exportToXlsxBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportToXlsxBtnActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel files","xls","excel");       
+        fileChooser.addChoosableFileFilter(filter);     
+        fileChooser.setFileFilter(filter);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setDialogTitle("Export file to xls");
+        int retval = fileChooser.showSaveDialog(this);
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            
+        File file = fileChooser.getSelectedFile();
+        if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("xls")) {
+        } else {
+            file = new File(file.toString() + ".xll");
+            file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".xls"); 
+        }
+        NewXls.createXls(file);
+        
+        }
+    }//GEN-LAST:event_exportToXlsxBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,7 +191,7 @@ public class ProductionView extends javax.swing.JFrame {
                 model.addRow(data.toArray());   
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ManagerView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductionView.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
@@ -163,6 +202,7 @@ public class ProductionView extends javax.swing.JFrame {
         model.setRowCount(0);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton exportToXlsxBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable productTbl;

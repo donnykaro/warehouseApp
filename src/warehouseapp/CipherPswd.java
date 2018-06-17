@@ -11,6 +11,8 @@ package warehouseapp;
  */
 public class CipherPswd {
     // TODO add better cipher for password
+    CipherPswd(){
+    }
     
     public static String encodePassword(String password){
         String encPswd = "";
